@@ -36,4 +36,12 @@ public class UserController {
         UserStatsDTO stats = userService.getUserStats(email);
         return ResponseEntity.ok(stats);
     }
+
+    // --- NEW: Walkie-Talkie Receiver for the Catalog Service! ---
+    // The Catalog Service will call this to find out who uploaded the song
+    @GetMapping("/{email}")
+    public ResponseEntity<UserProfileDTO> getUserByEmail(@PathVariable("email") String email) {
+        UserProfileDTO profile = userService.getUserProfile(email);
+        return ResponseEntity.ok(profile);
+    }
 }
