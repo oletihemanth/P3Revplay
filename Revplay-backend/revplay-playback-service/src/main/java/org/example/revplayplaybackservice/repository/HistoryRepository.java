@@ -19,4 +19,11 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
 
     @Query("SELECT SUM(h.songDuration) FROM History h WHERE h.userEmail = :email")
     Long calculateTotalListeningTimeInSeconds(@Param("email") String email);
+
+    // ---  NEW: ANALYTICS AGGREGATION QUERIES  ---
+    @Query("SELECT h.userEmail, COUNT(h) FROM History h WHERE h.songId IN :songIds GROUP BY h.userEmail ORDER BY COUNT(h) DESC")
+    List<Object[]> findTopListenersBySongIds(@Param("songIds") List<Long> songIds);
+
+    @Query("SELECT FUNCTION('DATE', h.playedAt), COUNT(h) FROM History h WHERE h.songId IN :songIds GROUP BY FUNCTION('DATE', h.playedAt) ORDER BY FUNCTION('DATE', h.playedAt) ASC")
+    List<Object[]> findTrendsBySongIds(@Param("songIds") List<Long> songIds);
 }

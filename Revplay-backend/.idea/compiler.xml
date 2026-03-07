@@ -6,28 +6,30 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="revplay-eureka-server" />
         <module name="revplay-api-gateway" />
+        <module name="revplay-eureka-server" />
         <module name="revplay-config-server" />
       </profile>
-      <profile name="Annotation profile for revplay-playback-service" enabled="true">
+      <profile name="Annotation profile for revplay-analytics-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
-        <module name="revplay-playlist-service" />
         <module name="revplay-user-service" />
+        <module name="revplay-analytics-service" />
         <module name="revplay-auth-service" />
-        <module name="revplay-playback-service" />
         <module name="revplay-favorite-service" />
+        <module name="revplay-playlist-service" />
+        <module name="revplay-playback-service" />
         <module name="revplay-catalog-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="revplay-analytics-service" options="-parameters" />
       <module name="revplay-api-gateway" options="-parameters" />
       <module name="revplay-auth-service" options="-parameters" />
       <module name="revplay-catalog-service" options="-parameters" />

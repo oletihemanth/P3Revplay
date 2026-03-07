@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.List;
+
 @FeignClient(name = "REVPLAY-CATALOG-SERVICE")
 public interface CatalogClient {
 
@@ -15,4 +17,8 @@ public interface CatalogClient {
 
     @PutMapping("/api/songs/{songId}/increment-play")
     void incrementPlayCount(@RequestHeader("Authorization") String token, @PathVariable("songId") Long songId);
+
+    //  NEW: Fetch all song IDs for this artist
+    @GetMapping("/api/songs/internal/artist/song-ids")
+    List<Long> getArtistSongIds(@RequestHeader("Authorization") String token);
 }

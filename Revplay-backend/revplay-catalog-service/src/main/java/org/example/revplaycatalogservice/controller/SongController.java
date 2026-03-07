@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/songs")
@@ -122,10 +123,20 @@ public class SongController {
         return ResponseEntity.ok(songService.getLikedSongs(authentication.getName()));
     }
 
-    //  THIS IS THE FIX: Changed from @PostMapping to @PutMapping
     @PutMapping("/{songId}/increment-play")
     public ResponseEntity<String> incrementPlayCount(@PathVariable Long songId) {
         songService.incrementPlayCount(songId);
         return ResponseEntity.ok("{\"message\": \"Play count updated successfully\"}");
+    }
+
+    // ---  NEW: INTERNAL ANALYTICS ENDPOINTS ---
+    @GetMapping("/internal/artist/stats")
+    public ResponseEntity<Map<String, Object>> getArtistSongStats(Authentication authentication) {
+        return ResponseEntity.ok(songService.getArtistSongStats(authentication.getName()));
+    }
+
+    @GetMapping("/internal/artist/song-ids")
+    public ResponseEntity<List<Long>> getArtistSongIds(Authentication authentication) {
+        return ResponseEntity.ok(songService.getArtistSongIds(authentication.getName()));
     }
 }

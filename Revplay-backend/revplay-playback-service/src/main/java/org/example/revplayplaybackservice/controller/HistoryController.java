@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/history")
@@ -56,5 +57,16 @@ public class HistoryController {
     public ResponseEntity<String> getTotalTime(Authentication authentication) {
         String timeStats = historyService.getTotalListeningTime(authentication.getName());
         return ResponseEntity.ok("{\"totalListeningTime\": \"" + timeStats + "\"}");
+    }
+
+    // ---  NEW: INTERNAL ANALYTICS ENDPOINTS  ---
+    @GetMapping("/internal/artist/top-listeners")
+    public ResponseEntity<List<Map<String, Object>>> getTopListeners(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(historyService.getTopListenersForArtist(token));
+    }
+
+    @GetMapping("/internal/artist/trends")
+    public ResponseEntity<List<Map<String, Object>>> getListeningTrends(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(historyService.getListeningTrendsForArtist(token));
     }
 }

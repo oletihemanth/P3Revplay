@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,8 +30,6 @@ public class SongService {
     private final AlbumRepository albumRepository;
     private final FileStorageService fileStorageService;
     private final LikedSongRepository likedSongRepository;
-
-    // 1. INJECT THE WALKIE-TALKIE!
     private final UserClient userClient;
 
     public SongService(SongRepository songRepository, ArtistRepository artistRepository,
@@ -40,7 +40,7 @@ public class SongService {
         this.albumRepository = albumRepository;
         this.fileStorageService = fileStorageService;
         this.likedSongRepository = likedSongRepository;
-        this.userClient = userClient; // Initialize it here
+        this.userClient = userClient;
     }
 
     public List<SongDTO> getAllSongs() {
@@ -167,21 +167,39 @@ public class SongService {
         songRepository.save(song);
     }
 
-    // 2. USE THE WALKIE-TALKIE HERE!
+    // ---  NEW: INTERNAL ANALYTICS METHODS  ---
+    public Map<String, Object> getArtistSongStats(String email) {
+        Artist artist = getArtistByEmail(email);
+        List<Song> artistSongs = songRepository.findByArtist(artist);
+        long totalPlays = artistSongs.stream().mapToLong(s -> s.getPlayCount() != null ? s.getPlayCount() : 0).sum();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("artistName", artist.getArtistName());
+        stats.put("genre", artist.getGenre());
+        stats.put("totalSongs", artistSongs.size());
+        stats.put("totalPlays", totalPlays);
+        return stats;
+    }
+
+    public List<Long> getArtistSongIds(String email) {
+        Artist artist = getArtistByEmail(email);
+        return songRepository.findByArtist(artist).stream()
+                .map(Song::getSongId)
+                .collect(Collectors.toList());
+    }
+
     private Artist getArtistByEmail(String email) {
         return artistRepository.findByEmail(email).orElseGet(() -> {
             System.out.println("Auto-creating Artist profile for: " + email);
             Artist newArtist = new Artist();
             newArtist.setEmail(email);
 
-            String displayName = email.split("@")[0]; // Fallback name
+            String displayName = email.split("@")[0];
 
             try {
-                // Radio the User Service to get the real name!
                 UserDTO userProfile = userClient.getUserByEmail(email);
                 if (userProfile != null && userProfile.getName() != null) {
                     displayName = userProfile.getName();
-                    System.out.println("Walkie-Talkie Success! Fetched real name: " + displayName);
                 }
             } catch (Exception e) {
                 System.out.println("Walkie-Talkie Failed (User Service might be down). Using fallback name.");

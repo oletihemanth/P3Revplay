@@ -8,7 +8,10 @@ import org.example.revplayplaybackservice.repository.HistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,6 +72,41 @@ public class HistoryService {
             long remainingMinutes = minutes % 60;
             return hours + " hours, " + remainingMinutes + " minutes";
         }
+    }
+
+    // ---  NEW: INTERNAL ANALYTICS METHODS  ---
+    public List<Map<String, Object>> getTopListenersForArtist(String token) {
+        List<Long> songIds = catalogClient.getArtistSongIds(token);
+        if (songIds == null || songIds.isEmpty()) return new ArrayList<>();
+
+        List<Object[]> results = historyRepository.findTopListenersBySongIds(songIds);
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Map<String, Object> map = new HashMap<>();
+            String userEmail = row[0].toString();
+            map.put("userName", userEmail.split("@")[0]); // Temporary Display Name
+            map.put("profilePictureUrl", "");
+            map.put("totalPlays", ((Number) row[1]).longValue());
+            response.add(map);
+        }
+        return response;
+    }
+
+    public List<Map<String, Object>> getListeningTrendsForArtist(String token) {
+        List<Long> songIds = catalogClient.getArtistSongIds(token);
+        if (songIds == null || songIds.isEmpty()) return new ArrayList<>();
+
+        List<Object[]> results = historyRepository.findTrendsBySongIds(songIds);
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", row[0].toString());
+            map.put("playCount", ((Number) row[1]).longValue());
+            response.add(map);
+        }
+        return response;
     }
 
     private HistoryDTO mapToDTO(String token, History history) {
