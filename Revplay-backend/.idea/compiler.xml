@@ -10,7 +10,7 @@
         <module name="revplay-api-gateway" />
         <module name="revplay-config-server" />
       </profile>
-      <profile name="Annotation profile for revplay-favorite-service" enabled="true">
+      <profile name="Annotation profile for revplay-playback-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -20,6 +20,7 @@
         <module name="revplay-playlist-service" />
         <module name="revplay-user-service" />
         <module name="revplay-auth-service" />
+        <module name="revplay-playback-service" />
         <module name="revplay-favorite-service" />
         <module name="revplay-catalog-service" />
       </profile>
@@ -33,6 +34,7 @@
       <module name="revplay-config-server" options="-parameters" />
       <module name="revplay-eureka-server" options="-parameters" />
       <module name="revplay-favorite-service" options="-parameters" />
+      <module name="revplay-playback-service" options="-parameters" />
       <module name="revplay-playlist-service" options="-parameters" />
       <module name="revplay-user-service" options="-parameters" />
     </option>

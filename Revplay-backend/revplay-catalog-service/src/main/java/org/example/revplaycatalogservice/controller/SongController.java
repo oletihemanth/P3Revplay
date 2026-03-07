@@ -122,7 +122,8 @@ public class SongController {
         return ResponseEntity.ok(songService.getLikedSongs(authentication.getName()));
     }
 
-    @PostMapping("/{songId}/increment-play")
+    //  THIS IS THE FIX: Changed from @PostMapping to @PutMapping
+    @PutMapping("/{songId}/increment-play")
     public ResponseEntity<String> incrementPlayCount(@PathVariable Long songId) {
         songService.incrementPlayCount(songId);
         return ResponseEntity.ok("{\"message\": \"Play count updated successfully\"}");
