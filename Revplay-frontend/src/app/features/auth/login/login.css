@@ -48,3 +48,33 @@ input, select {
 .auth-btn:hover { background: #1ed760; }
 .auth-footer { margin-top: 20px; text-align: center; font-size: 14px; }
 .auth-footer a { color: #1DB954; text-decoration: none; font-weight: bold; }
+
+/* --- REFINED: SVG Icon Toggle CSS --- */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 45px; /* Room for the SVG icon */
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b3b3b3; /* Normal gray color */
+  padding: 0;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.toggle-password-btn:hover {
+  color: #ffffff; /* Icon turns white when hovered */
+}

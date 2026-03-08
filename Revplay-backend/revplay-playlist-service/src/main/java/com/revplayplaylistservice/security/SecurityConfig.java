@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
-                        // Allow public playlists to be seen without logging in
-                        .requestMatchers("/api/playlists/public").permitAll()
+                        // 🚨 FIX: Allow public playlists AND playlist images to be seen without logging in
+                        .requestMatchers("/api/playlists/public", "/api/playlists/image/**").permitAll()
                         // Everything else requires a valid Bearer Token!
                         .anyRequest().authenticated()
                 )

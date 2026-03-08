@@ -3,6 +3,7 @@ package org.example.revplaycatalogservice.repository;
 import org.example.revplaycatalogservice.entity.Artist;
 import org.example.revplaycatalogservice.entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,9 @@ public interface SongRepository extends JpaRepository<Song, Long> {
                            @Param("artistName") String artistName,
                            @Param("albumName") String albumName,
                            @Param("releaseYear") Integer releaseYear);
+
+    //  FIX: Atomic increment directly in the database to prevent race conditions!
+    @Modifying
+    @Query("UPDATE Song s SET s.playCount = COALESCE(s.playCount, 0) + 1 WHERE s.songId = :songId")
+    void incrementPlayCountAtomically(@Param("songId") Long songId);
 }

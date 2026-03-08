@@ -31,7 +31,11 @@ public class SecurityConfig {
                         // 1. Make images and audio public so HTML tags work!
                         .requestMatchers("/api/songs/play/**", "/api/songs/image/**").permitAll()
 
-                        // 🚨 FIX: Swapped .hasRole("ARTIST") to .hasAuthority("ROLE_ARTIST")
+                        //  FIX: Punch a hole for ALL users to increment play counts!
+                        // Because this is above the blanket rules below, it grants permission first.
+                        .requestMatchers(HttpMethod.PUT, "/api/songs/*/increment-play").authenticated()
+
+                        // 2. Restrict all other modifying endpoints to Artists only
                         .requestMatchers(HttpMethod.POST, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")
                         .requestMatchers(HttpMethod.PUT, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")
                         .requestMatchers(HttpMethod.DELETE, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")

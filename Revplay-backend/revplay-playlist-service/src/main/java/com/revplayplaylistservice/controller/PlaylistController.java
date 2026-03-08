@@ -2,12 +2,16 @@ package com.revplayplaylistservice.controller;
 
 import com.revplayplaylistservice.dto.PlaylistResponse;
 import com.revplayplaylistservice.service.CurationService;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -32,7 +36,6 @@ public class PlaylistController {
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "privacy", defaultValue = "PUBLIC") String privacy,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
-        // authentication.getName() extracts the email from the JWT!
         return ResponseEntity.ok(curationService.createPlaylist(authentication.getName(), name, description, privacy, coverImage));
     }
 
@@ -79,5 +82,24 @@ public class PlaylistController {
     public ResponseEntity<String> toggleFollowPlaylist(Authentication authentication, @PathVariable Long playlistId) {
         String message = curationService.toggleFollowPlaylist(authentication.getName(), playlistId);
         return ResponseEntity.ok("{\"message\": \"" + message + "\"}");
+    }
+
+    // --- NEW: SERVE PLAYLIST IMAGES ---
+    @GetMapping("/image/{fileName:.+}")
+    public ResponseEntity<Resource> getPlaylistImage(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get("uploads/playlists/").resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

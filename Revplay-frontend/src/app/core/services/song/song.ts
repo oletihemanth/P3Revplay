@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'; //  NEW: Imported to map the backend response!
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../auth/auth'; 
 
@@ -10,7 +11,9 @@ import { AuthService } from '../auth/auth';
 export class Song {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  
   private apiUrl = `${environment.apiUrl}/songs`;
+  private favoritesUrl = `${environment.apiUrl}/favorites`; //  NEW: Pointing to the Favorite Service!
 
   getAllSongs(): Observable<any[]> {
     const token = this.authService.getToken(); 
@@ -36,16 +39,20 @@ export class Song {
     return this.http.get<any[]>(`${this.apiUrl}/filter?genre=${genre}`, { headers });
   }
 
+  //  FIX: Re-routed to the Favorite Service and mapped the string response to a boolean!
   toggleLike(songId: number): Observable<boolean> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    return this.http.post<boolean>(`${this.apiUrl}/${songId}/like`, {}, { headers });
+    return this.http.post<any>(`${this.favoritesUrl}/${songId}`, {}, { headers }).pipe(
+      map(response => response.message === "Song added to favorites!")
+    );
   }
 
+  //  FIX: Re-routed to the Favorite Service!
   getLikedSongs(): Observable<any[]> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    return this.http.get<any[]>(`${this.apiUrl}/liked`, { headers });
+    return this.http.get<any[]>(this.favoritesUrl, { headers });
   }
 
   getMyUploadedSongs(): Observable<any[]> {
@@ -67,10 +74,10 @@ export class Song {
     return this.http.put(url, {}, { headers });
   }
 
-  // --- NEW: Increment Play Count ---
   incrementPlayCount(songId: number): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    return this.http.post(`${this.apiUrl}/${songId}/increment-play`, {}, { headers, responseType: 'text' as 'json' });
+    //  FIX: Changed .post to .put to match the Controller and the Bouncer!
+    return this.http.put(`${this.apiUrl}/${songId}/increment-play`, {}, { headers, responseType: 'text' as 'json' });
   }
 }

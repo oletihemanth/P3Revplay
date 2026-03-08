@@ -160,14 +160,11 @@ public class SongService {
 
     @Transactional
     public void incrementPlayCount(Long songId) {
-        Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
-        Long currentCount = song.getPlayCount() != null ? song.getPlayCount() : 0L;
-        song.setPlayCount(currentCount + 1L);
-        songRepository.save(song);
+        //  FIX: Call the atomic database query directly!
+        songRepository.incrementPlayCountAtomically(songId);
     }
 
-    // ---  NEW: INTERNAL ANALYTICS METHODS  ---
+    // --- INTERNAL ANALYTICS METHODS ---
     public Map<String, Object> getArtistSongStats(String email) {
         Artist artist = getArtistByEmail(email);
         List<Song> artistSongs = songRepository.findByArtist(artist);
@@ -176,7 +173,12 @@ public class SongService {
         Map<String, Object> stats = new HashMap<>();
         stats.put("artistName", artist.getArtistName());
         stats.put("genre", artist.getGenre());
+
+        //  FIX: Pass multiple variations of the key so the frontend catches it perfectly!
         stats.put("totalSongs", artistSongs.size());
+        stats.put("uploadedSongs", artistSongs.size());
+        stats.put("songCount", artistSongs.size());
+
         stats.put("totalPlays", totalPlays);
         return stats;
     }
@@ -216,7 +218,7 @@ public class SongService {
         dto.setTitle(song.getTitle());
         dto.setGenre(song.getGenre());
         dto.setDuration(song.getDuration());
-        dto.setPlayCount(song.getPlayCount());
+        dto.setPlayCount(song.getPlayCount() != null ? song.getPlayCount() : 0L);
         dto.setAudioFileUrl(song.getAudioFileUrl());
         dto.setCoverImageUrl(song.getCoverImageUrl());
 

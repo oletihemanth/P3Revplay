@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Playlist } from '../../../core/services/playlist/playlist'; 
-import { AudioService } from '../../../core/services/audio/audio'; //  NEW
-import { Song } from '../../../core/services/song/song'; //  NEW
-import { History } from '../../../core/services/history/history'; //  NEW
+import { AudioService } from '../../../core/services/audio/audio'; 
+import { Song } from '../../../core/services/song/song'; 
+import { History } from '../../../core/services/history/history'; 
 import { environment } from '../../../../environments/environment'; 
 
 @Component({
@@ -18,7 +18,7 @@ export class PlaylistDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private playlistService = inject(Playlist);
   
-  //  Inject Global Player Services
+  // Inject Global Player Services
   private audioService = inject(AudioService);
   private songService = inject(Song);
   private historyService = inject(History);
@@ -40,9 +40,8 @@ export class PlaylistDetail implements OnInit {
     });
   }
 
-  //  UPDATED: Send to Global Player
+  // Send to Global Player
   playSong(song: any) {
-    // Map the playlist into a queue format your player understands
     const mappedQueue = this.playlistData.songs.map((s: any) => ({
       songId: s.songId,
       title: s.title || s.songTitle,
@@ -66,7 +65,7 @@ export class PlaylistDetail implements OnInit {
     }
   }
 
-  //  NEW: Plays the full playlist starting from track 1
+  // Plays the full playlist starting from track 1
   playFullPlaylist() {
     if (this.playlistData?.songs?.length > 0) {
       this.playSong(this.playlistData.songs[0]); 
@@ -86,8 +85,16 @@ export class PlaylistDetail implements OnInit {
     }
   }
 
+  //  FIX: Smart URL builder to route playlist images and song images to their correct microservices!
   getCoverImageUrl(fileName: string | null): string {
     if (!fileName) return '';
+    
+    // Check if the image matches the playlist's main cover image
+    if (this.playlistData && this.playlistData.coverImageUrl === fileName) {
+      return `${environment.apiUrl}/playlists/image/${fileName}`;
+    }
+    
+    // Otherwise, it must be a song cover inside the playlist
     return `${environment.apiUrl}/songs/image/${fileName}`;
   }
 

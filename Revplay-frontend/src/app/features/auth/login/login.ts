@@ -16,9 +16,23 @@ export class Login {
 
   // View state
   showForgotPassword = false;
+  
+  // NEW: Password visibility states
+  showPassword = false;
+  showResetPassword = false;
 
   toggleView() {
     this.showForgotPassword = !this.showForgotPassword;
+  }
+
+  // NEW: Toggle main password
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // NEW: Toggle reset password
+  toggleResetPasswordVisibility() {
+    this.showResetPassword = !this.showResetPassword;
   }
 
   onLogin(event: Event) {

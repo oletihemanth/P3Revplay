@@ -18,7 +18,13 @@ export class Profile implements OnInit {
   private authService = inject(AuthService);
 
   userProfile: any = null;
-  userStats: any = null;
+  
+  // Initialize with 0s so the HTML doesn't break while loading!
+  userStats: any = {
+    totalPlaylists: 0,
+    favoriteSongsCount: 0,
+    totalPlays: 0
+  };
   
   newName: string = '';
   isEditing: boolean = false;
@@ -36,18 +42,31 @@ export class Profile implements OnInit {
     this.http.get(`${environment.apiUrl}/users/me`, { headers: this.getHeaders() }).subscribe({
       next: (data: any) => {
         this.userProfile = data;
-        this.newName = data.name; // Pre-fill the edit input
+        this.newName = data.name; 
       },
       error: (err) => console.error('Failed to load profile', err)
     });
   }
 
   fetchStats() {
-    this.http.get(`${environment.apiUrl}/users/me/stats`, { headers: this.getHeaders() }).subscribe({
-      next: (data: any) => {
-        this.userStats = data;
-      },
-      error: (err) => console.error('Failed to load stats', err)
+    const headers = this.getHeaders();
+
+    // Fetch the REAL favorites count directly from your Favorite Service!
+    this.http.get<any>(`${environment.apiUrl}/favorites/count`, { headers }).subscribe({
+      next: (data) => this.userStats.favoriteSongsCount = data.count || 0,
+      error: (err) => console.error('Failed to load favorites stats', err)
+    });
+
+    // Fetch the REAL playlists count directly from your Playlist Service!
+    this.http.get<any[]>(`${environment.apiUrl}/playlists/me`, { headers }).subscribe({
+      next: (data) => this.userStats.totalPlaylists = data.length || 0,
+      error: (err) => console.error('Failed to load playlists stats', err)
+    });
+
+    //  FIX: Fetch the REAL total play count for Artists directly from Catalog Service!
+    this.http.get<any>(`${environment.apiUrl}/songs/internal/artist/stats`, { headers }).subscribe({
+      next: (data) => this.userStats.totalPlays = data.totalPlays || 0,
+      error: (err) => console.error('Failed to load total plays', err)
     });
   }
 
@@ -57,12 +76,14 @@ export class Profile implements OnInit {
       return;
     }
 
-    this.http.put(`${environment.apiUrl}/users/me/name?name=${encodeURIComponent(this.newName)}`, {}, { headers: this.getHeaders(), responseType: 'text' })
+    const body = { name: this.newName };
+
+    this.http.put(`${environment.apiUrl}/users/me`, body, { headers: this.getHeaders() })
       .subscribe({
         next: () => {
           this.userProfile.name = this.newName;
           this.isEditing = false;
-          // Update local storage so the header on other pages updates immediately
+          // Update local storage so the header updates immediately
           localStorage.setItem('userName', this.newName);
         },
         error: (err) => {
