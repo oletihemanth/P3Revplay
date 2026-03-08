@@ -20,7 +20,7 @@
         </processorPath>
         <module name="revplay-catalog-service" />
       </profile>
-      <profile name="Annotation profile for revplay-favorite-service" enabled="true">
+      <profile name="Annotation profile for revplay-playlist-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

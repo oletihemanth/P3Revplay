@@ -1,0 +1,40 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Join RevPlay</h2>
+    <p class="subtitle">Start listening to the best tracks today.</p>
+
+    <div *ngIf="message" class="alert" [ngClass]="{'error': isError, 'success': !isError}">
+      {{ message }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      
+      <div class="form-group">
+        <label for="name">Display Name</label>
+        <input type="text" id="name" name="name" [(ngModel)]="user.name" required placeholder="How should we call you?">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" [(ngModel)]="user.email" required placeholder="name@domain.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="user.password" required placeholder="Create a strong password">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Account Type</label>
+        <select id="role" name="role" [(ngModel)]="user.role">
+          <option value="USER">Listener (Standard)</option>
+          <option value="ARTIST">Artist (Upload Music)</option>
+        </select>
+      </div>
+
+      <button type="submit" [disabled]="!registerForm.valid" class="submit-btn">Sign Up</button>
+    </form>
+    
+    <p class="login-link">Already have an account? <a href="#">Log in here</a></p>
+  </div>
+</div>
