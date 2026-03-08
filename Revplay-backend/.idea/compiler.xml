@@ -10,20 +10,29 @@
         <module name="revplay-eureka-server" />
         <module name="revplay-config-server" />
       </profile>
-      <profile name="Annotation profile for revplay-analytics-service" enabled="true">
+      <profile name="Annotation profile for revplay-catalog-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="revplay-catalog-service" />
+      </profile>
+      <profile name="Annotation profile for revplay-favorite-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
+        <module name="revplay-playlist-service" />
         <module name="revplay-user-service" />
         <module name="revplay-analytics-service" />
         <module name="revplay-auth-service" />
-        <module name="revplay-favorite-service" />
-        <module name="revplay-playlist-service" />
         <module name="revplay-playback-service" />
-        <module name="revplay-catalog-service" />
+        <module name="revplay-favorite-service" />
       </profile>
     </annotationProcessing>
   </component>

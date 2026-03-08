@@ -34,27 +34,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = authorizationHeader.substring(7);
             try {
                 String username = jwtUtil.extractUsername(jwt);
-                String role = jwtUtil.extractRole(jwt); // Extract the Role!
+                String role = jwtUtil.extractRole(jwt);
+
+                //  FIX: Added these to see what is hiding inside your token!
+                System.out.println("️ DEBUG - Token Username: " + username);
+                System.out.println("️ DEBUG - Token Role: " + role);
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     if (jwtUtil.validateToken(jwt)) {
 
-                        // Format the role for Spring Security (e.g., "ROLE_ADMIN")
                         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                         if (role != null) {
                             String authorityRole = role.startsWith("ROLE_") ? role.toUpperCase() : "ROLE_" + role.toUpperCase();
                             authorities.add(new SimpleGrantedAuthority(authorityRole));
                         }
 
-                        // Pass the authorities (roles) into the security context
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 username, null, authorities);
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
-            } catch (Exception ignored) {
-                // Token is invalid or expired
+            } catch (Exception e) {
+                //  FIX: Actually print the error so we can see if parsing failed!
+                System.out.println(" DEBUG - Token parsing failed! Error: " + e.getMessage());
             }
         }
         filterChain.doFilter(request, response);

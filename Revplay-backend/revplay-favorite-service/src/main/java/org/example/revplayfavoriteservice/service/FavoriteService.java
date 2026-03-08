@@ -35,14 +35,15 @@ public class FavoriteService {
         }
     }
 
-    public List<SongDTO> getMyFavorites(String email) {
-        // Find the favorite IDs, then ask CatalogClient for the full song details!
+    //  FIX: Accept the token and pass it to the CatalogClient
+    public List<SongDTO> getMyFavorites(String token, String email) {
         return favoriteRepository.findByUserEmail(email).stream()
                 .map(favorite -> {
                     try {
-                        return catalogClient.getSongById(favorite.getSongId());
+                        return catalogClient.getSongById(token, favorite.getSongId());
                     } catch (Exception e) {
-                        return null; // Ignore if the song was deleted from the catalog
+                        System.out.println("Walkie-Talkie failed for Song ID: " + favorite.getSongId());
+                        return null;
                     }
                 })
                 .filter(song -> song != null)

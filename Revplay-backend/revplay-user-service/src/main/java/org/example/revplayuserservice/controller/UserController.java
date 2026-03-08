@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -24,9 +26,11 @@ public class UserController {
         return ResponseEntity.ok(profile);
     }
 
-    @PutMapping("/me/name")
-    public ResponseEntity<String> updateDisplayName(Authentication authentication, @RequestParam String name) {
-        userService.updateDisplayName(authentication.getName(), name);
+    //  FIX: Changed the URL to "/me" and added @RequestBody to accept JSON!
+    @PutMapping("/me")
+    public ResponseEntity<String> updateDisplayName(Authentication authentication, @RequestBody Map<String, String> payload) {
+        String newName = payload.get("name");
+        userService.updateDisplayName(authentication.getName(), newName);
         return ResponseEntity.ok("{\"message\": \"Display name updated successfully.\"}");
     }
 

@@ -18,9 +18,10 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
+    // FIX: Added @RequestHeader to capture the token
     @GetMapping
-    public ResponseEntity<List<SongDTO>> getMyFavorites(Authentication authentication) {
-        return ResponseEntity.ok(favoriteService.getMyFavorites(authentication.getName()));
+    public ResponseEntity<List<SongDTO>> getMyFavorites(@RequestHeader("Authorization") String token, Authentication authentication) {
+        return ResponseEntity.ok(favoriteService.getMyFavorites(token, authentication.getName()));
     }
 
     @GetMapping("/count")

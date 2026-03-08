@@ -31,10 +31,10 @@ public class SecurityConfig {
                         // 1. Make images and audio public so HTML tags work!
                         .requestMatchers("/api/songs/play/**", "/api/songs/image/**").permitAll()
 
-                        // 2. ONLY ARTISTS can Upload, Edit, and Delete! (Removed ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/songs/**", "/api/albums/**").hasRole("ARTIST")
-                        .requestMatchers(HttpMethod.PUT, "/api/songs/**", "/api/albums/**").hasRole("ARTIST")
-                        .requestMatchers(HttpMethod.DELETE, "/api/songs/**", "/api/albums/**").hasRole("ARTIST")
+                        // 🚨 FIX: Swapped .hasRole("ARTIST") to .hasAuthority("ROLE_ARTIST")
+                        .requestMatchers(HttpMethod.POST, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")
+                        .requestMatchers(HttpMethod.PUT, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")
+                        .requestMatchers(HttpMethod.DELETE, "/api/songs", "/api/songs/**", "/api/albums", "/api/albums/**").hasAuthority("ROLE_ARTIST")
 
                         // 3. Normal users can view (GET) and interact with other endpoints
                         .anyRequest().authenticated()
