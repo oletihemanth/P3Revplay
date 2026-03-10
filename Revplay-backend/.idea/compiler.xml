@@ -10,7 +10,7 @@
         <module name="revplay-eureka-server" />
         <module name="revplay-config-server" />
       </profile>
-      <profile name="Annotation profile for revplay-auth-service" enabled="true">
+      <profile name="Annotation profile for revplay-playlist-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
