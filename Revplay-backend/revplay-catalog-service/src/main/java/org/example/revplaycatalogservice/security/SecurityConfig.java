@@ -28,6 +28,14 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        //  ADDED SWAGGER ENDPOINTS HERE: Allow API Gateway to fetch docs
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
                         // 1. Make images and audio public so HTML tags work!
                         .requestMatchers("/api/songs/play/**", "/api/songs/image/**").permitAll()
 

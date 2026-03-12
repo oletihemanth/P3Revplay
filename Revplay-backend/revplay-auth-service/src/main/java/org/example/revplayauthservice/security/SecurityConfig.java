@@ -31,8 +31,14 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Allow everyone to Login and Register
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // 🚨 ADDED SWAGGER ENDPOINTS HERE: Allow everyone to Login, Register, and view Docs
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         // All other User routes require authentication
                         .anyRequest().authenticated()
                 )

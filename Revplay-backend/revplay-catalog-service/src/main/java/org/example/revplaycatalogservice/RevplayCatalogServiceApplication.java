@@ -6,7 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class RevplayCatalogServiceApplication {
+public class
+RevplayCatalogServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RevplayCatalogServiceApplication.class, args);

@@ -23,8 +23,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
-                        // 🚨 FIX: Allow public playlists AND playlist images to be seen without logging in
-                        .requestMatchers("/api/playlists/public", "/api/playlists/image/**").permitAll()
+                        // 🚨 ADDED SWAGGER ENDPOINTS & Existing public routes
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/api/playlists/public",
+                                "/api/playlists/image/**"
+                        ).permitAll()
                         // Everything else requires a valid Bearer Token!
                         .anyRequest().authenticated()
                 )
