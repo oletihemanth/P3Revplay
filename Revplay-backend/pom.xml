@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>revplay-backend</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>revplay-analytics-service</module>
+        <module>revplay-api-gateway</module>
+        <module>revplay-auth-service</module>
+        <module>revplay-catalog-service</module>
+        <module>revplay-config-server</module>
+        <module>revplay-eureka-server</module>
+        <module>revplay-favorite-service</module>
+        <module>revplay-playback-service</module>
+        <module>revplay-playlist-service</module>
+        <module>revplay-user-service</module>
+    </modules>
+</project>

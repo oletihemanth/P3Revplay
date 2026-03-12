@@ -1,79 +1,130 @@
 services:
-  # 1. THE DATABASE
-  mysql-db:
-    image: mysql:8.0
-    container_name: mysql-db
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: Prasad@666
-
-  # 2. THE PHONEBOOK (EUREKA)
+  # 1. THE PHONEBOOK (EUREKA)
   eureka-server:
     build: ./revplay-eureka-server
     container_name: eureka-server
     ports:
       - "8761:8761"
 
-  # 3. THE CONFIG SERVER
+  # 2. THE CONFIG SERVER
   config-server:
     build: ./revplay-config-server
     container_name: config-server
     ports:
       - "8888:8888"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
 
-  # 4. THE TRAFFIC COP (API GATEWAY)
+  # 3. THE TRAFFIC COP (API GATEWAY)
   api-gateway:
     build: ./revplay-api-gateway
     container_name: api-gateway
     ports:
       - "8080:8080"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
 
-  # 5. THE AUTH SERVICE
+  # 4. THE AUTH SERVICE
   auth-service:
     build: ./revplay-auth-service
     container_name: auth-service
     ports:
       - "8081:8081"
     depends_on:
-      - mysql-db
       - eureka-server
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_auth_db?createDatabaseIfNotExist=true
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_auth_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
 
-  # 6. THE USER SERVICE
+  # 5. THE USER SERVICE
   user-service:
     build: ./revplay-user-service
     container_name: user-service
     ports:
       - "8082:8082"
     depends_on:
-      - mysql-db
       - eureka-server
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_user_db?createDatabaseIfNotExist=true
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_user_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
 
-  # 7. THE CATALOG SERVICE
+  # 6. THE CATALOG SERVICE
   catalog-service:
     build: ./revplay-catalog-service
     container_name: catalog-service
     ports:
       - "8083:8083"
     depends_on:
-      - mysql-db
       - eureka-server
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_catalog_db?createDatabaseIfNotExist=true
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_catalog_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
+
+  # 7. THE PLAYLIST SERVICE
+  playlist-service:
+    build: ./revplay-playlist-service
+    container_name: playlist-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_playlist_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
+
+  # 8. THE FAVORITE SERVICE
+  favorite-service:
+    build: ./revplay-favorite-service
+    container_name: favorite-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_favorite_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
+
+  # 9. THE PLAYBACK SERVICE
+  playback-service:
+    build: ./revplay-playback-service
+    container_name: playback-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_playback_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
+
+  # 10. THE ANALYTICS SERVICE
+  analytics-service:
+    build: ./revplay-analytics-service
+    container_name: analytics-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/revplay_analytics_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework

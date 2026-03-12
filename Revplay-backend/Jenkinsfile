@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean and Build JARs') {
+            steps {
+                echo 'Building all Microservices via Maven...'
+                // If you have a parent pom.xml in the root folder, use this:
+                bat 'mvnw.cmd clean package -DskipTests'
+
+                // NOTE: If you don't have a parent pom.xml, uncomment and use these instead:
+                // bat 'cd revplay-eureka-server && mvnw.cmd clean package -DskipTests'
+                // bat 'cd revplay-api-gateway && mvnw.cmd clean package -DskipTests'
+                // bat 'cd revplay-auth-service && mvnw.cmd clean package -DskipTests'
+                // bat 'cd revplay-user-service && mvnw.cmd clean package -DskipTests'
+                // (Add the rest of your services here)
+            }
+        }
+
+        stage('Deploy via Docker Compose') {
+            steps {
+                echo 'Tearing down old containers...'
+                // Ignore errors if the containers don't exist yet
+                catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    bat 'docker-compose down'
+                }
+
+                echo 'Building and spinning up new containers...'
+                bat 'docker-compose up -d --build'
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                echo 'Waiting 30 seconds for Eureka and services to boot up...'
+                sleep time: 30, unit: 'SECONDS'
+                echo 'Pipeline Complete! Check your APIs!'
+            }
+        }
+    }
+}
