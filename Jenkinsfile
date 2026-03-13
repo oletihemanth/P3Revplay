@@ -93,13 +93,11 @@ pipeline {
                     echo "Starting Frontend Container..."
                     script {
                         if (isUnix()) {
-                            sh 'docker stop revplay-frontend || true'
-                            sh 'docker rm revplay-frontend || true'
+                            sh 'docker rm -f revplay-frontend || true'
                             sh 'docker run -d -p 80:80 --name revplay-frontend revplay-frontend:latest'
                         } else {
                             bat '''
-                                docker stop revplay-frontend || exit 0
-                                docker rm revplay-frontend || exit 0
+                                docker rm -f revplay-frontend || echo "Container not found"
                                 docker run -d -p 80:80 --name revplay-frontend revplay-frontend:latest
                             '''
                         }
