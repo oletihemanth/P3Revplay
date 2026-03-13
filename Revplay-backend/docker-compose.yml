@@ -6,7 +6,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: Prasad@666
+      MYSQL_ROOT_PASSWORD: 8520
 
   # 2. THE PHONEBOOK (EUREKA)
   eureka-server:
@@ -46,7 +46,7 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_auth_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SPRING_DATASOURCE_PASSWORD=8520
 
   # 6. THE USER SERVICE
   user-service:
@@ -61,7 +61,7 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_user_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SPRING_DATASOURCE_PASSWORD=8520
 
   # 7. THE CATALOG SERVICE
   catalog-service:
@@ -76,4 +76,4 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_catalog_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Prasad@666
+      - SPRING_DATASOURCE_PASSWORD=8520

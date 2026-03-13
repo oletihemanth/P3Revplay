@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Revplay-backend.iml" filepath="$PROJECT_DIR$/.idea/Revplay-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revplay-api-gateway/revplay-api-gateway.iml" filepath="$PROJECT_DIR$/revplay-api-gateway/revplay-api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revplay-catalog-service/revplay-catalog-service.iml" filepath="$PROJECT_DIR$/revplay-catalog-service/revplay-catalog-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revplay-favorite-service/revplay-favorite-service.iml" filepath="$PROJECT_DIR$/revplay-favorite-service/revplay-favorite-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revplay-playback-service/revplay-playback-service.iml" filepath="$PROJECT_DIR$/revplay-playback-service/revplay-playback-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revplay-playlist-service/revplay-playlist-service.iml" filepath="$PROJECT_DIR$/revplay-playlist-service/revplay-playlist-service.iml" />
     </modules>
   </component>
 </project>
