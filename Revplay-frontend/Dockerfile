@@ -8,6 +8,8 @@ RUN rm -rf /usr/share/nginx/html/*
 # Our Jenkins pipeline runs 'npm run build' first, so the dist folder will be present
 COPY dist/frontend/browser /usr/share/nginx/html
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
 
