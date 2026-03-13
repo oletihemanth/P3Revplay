@@ -94,11 +94,11 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'docker rm -f revplay-frontend || true'
-                            sh 'docker run -d -p 4200:80 --name revplay-frontend revplay-frontend:latest'
+                            sh 'docker run -d -p 80:80 --name revplay-frontend revplay-frontend:latest'
                         } else {
                             bat '''
                                 docker rm -f revplay-frontend || echo "Container not found"
-                                docker run -d -p 4200:80 --name revplay-frontend revplay-frontend:latest
+                                docker run -d -p 80:80 --name revplay-frontend revplay-frontend:latest
                             '''
                         }
                     }
