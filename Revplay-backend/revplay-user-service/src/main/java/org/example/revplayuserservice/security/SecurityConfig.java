@@ -31,6 +31,8 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // Allow /error so Exceptions don't turn into 403s
+                        .requestMatchers("/error").permitAll()
                         // Since this is the User Service, EVERY request requires a valid JWT Token!
                         .anyRequest().authenticated()
                 )
