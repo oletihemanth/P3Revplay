@@ -16,7 +16,7 @@ pipeline {
         stage('Build Backend Apps (Maven)') {
             steps {
                 dir('Revplay-backend') {
-                    script {
+                    script { 
                         def services = env.BACKEND_SERVICES.split(' ')
                         for (service in services) {
                             dir(service) {
@@ -37,12 +37,14 @@ pipeline {
             steps {
                 dir('Revplay-frontend') {
                     echo "Building Angular Application..."
-                    if (isUnix()) {
-                        sh 'npm install'
-                        sh 'npm run build --configuration=production'
-                    } else {
-                        bat 'npm install'
-                        bat 'npm run build --configuration=production'
+                    script { // <-- Added script block here
+                        if (isUnix()) {
+                            sh 'npm install'
+                            sh 'npm run build --configuration=production'
+                        } else {
+                            bat 'npm install'
+                            bat 'npm run build --configuration=production'
+                        }
                     }
                 }
             }
@@ -52,19 +54,23 @@ pipeline {
             steps {
                 // Build Backend Docker Images
                 dir('Revplay-backend') {
-                    if (isUnix()) {
-                        sh 'docker-compose build'
-                    } else {
-                        bat 'docker-compose build'
+                    script { // <-- Added script block here
+                        if (isUnix()) {
+                            sh 'docker-compose build'
+                        } else {
+                            bat 'docker-compose build'
+                        }
                     }
                 }
                 
                 // Build Frontend Docker Image
                 dir('Revplay-frontend') {
-                    if (isUnix()) {
-                        sh 'docker build -t revplay-frontend:latest .'
-                    } else {
-                        bat 'docker build -t revplay-frontend:latest .'
+                    script { // <-- Added script block here
+                        if (isUnix()) {
+                            sh 'docker build -t revplay-frontend:latest .'
+                        } else {
+                            bat 'docker build -t revplay-frontend:latest .'
+                        }
                     }
                 }
             }
@@ -74,10 +80,12 @@ pipeline {
             steps {
                 dir('Revplay-backend') {
                     echo "Starting Backend Services..."
-                    if (isUnix()) {
-                        sh 'docker-compose up -d'
-                    } else {
-                        bat 'docker-compose up -d'
+                    script { // <-- Added script block here
+                        if (isUnix()) {
+                            sh 'docker-compose up -d'
+                        } else {
+                            bat 'docker-compose up -d'
+                        }
                     }
                 }
                 
