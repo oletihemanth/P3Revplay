@@ -15,7 +15,7 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         // Allow your Angular frontend
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost", "http://127.0.0.1", "http://localhost:80"));
         // Allow all standard HTTP methods
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // Allow all headers (like Authorization for your JWT tokens)
