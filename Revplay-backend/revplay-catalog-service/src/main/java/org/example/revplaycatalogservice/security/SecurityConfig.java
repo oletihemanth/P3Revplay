@@ -29,7 +29,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // 1. Make images and audio public so HTML tags work!
-                        .requestMatchers("/api/songs/play/**", "/api/songs/image/**").permitAll()
+                        .requestMatchers("/api/songs/play/**", "/api/songs/image/**", "/error").permitAll()
 
                         //  FIX: Punch a hole for ALL users to increment play counts!
                         // Because this is above the blanket rules below, it grants permission first.
