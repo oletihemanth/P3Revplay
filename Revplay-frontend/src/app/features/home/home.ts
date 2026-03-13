@@ -45,7 +45,7 @@ export class Home implements OnInit {
 
   recentHistory: any[] = [];
 
-  // NEW: Track which song is actively playing for the Pause button
+  //Track which song is actively playing for the Pause button
   currentPlayingSongId: number | null = null;
   isCurrentlyPlaying: boolean = false;
 
