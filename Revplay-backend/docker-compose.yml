@@ -85,7 +85,6 @@ services:
       - eureka-server
       - config-server
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_catalog_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -103,7 +102,6 @@ services:
       - eureka-server
       - config-server
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_playlist_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -121,7 +119,6 @@ services:
       - eureka-server
       - config-server
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_favorite_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -139,7 +136,6 @@ services:
       - eureka-server
       - config-server
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_playback_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -157,7 +153,6 @@ services:
       - eureka-server
       - config-server
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_analytics_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
