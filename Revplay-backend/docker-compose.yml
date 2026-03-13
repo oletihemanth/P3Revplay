@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # 1. THE DATABASE
   mysql-db:
@@ -19,6 +21,8 @@ services:
   config-server:
     build: ./revplay-config-server
     container_name: config-server
+    depends_on:
+      - eureka-server
     ports:
       - "8888:8888"
     environment:
@@ -28,6 +32,10 @@ services:
   api-gateway:
     build: ./revplay-api-gateway
     container_name: api-gateway
+    restart: on-failure
+    depends_on:
+      - eureka-server
+      - config-server
     ports:
       - "8080:8080"
     environment:
@@ -37,6 +45,7 @@ services:
   auth-service:
     build: ./revplay-auth-service
     container_name: auth-service
+    restart: on-failure
     ports:
       - "8081:8081"
     depends_on:
@@ -52,6 +61,7 @@ services:
   user-service:
     build: ./revplay-user-service
     container_name: user-service
+    restart: on-failure
     ports:
       - "8082:8082"
     depends_on:
@@ -67,13 +77,88 @@ services:
   catalog-service:
     build: ./revplay-catalog-service
     container_name: catalog-service
+    restart: on-failure
     ports:
       - "8083:8083"
     depends_on:
       - mysql-db
       - eureka-server
+      - config-server
     environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_catalog_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=8520
+
+  # 8. THE PLAYLIST SERVICE
+  playlist-service:
+    build: ./revplay-playlist-service
+    container_name: playlist-service
+    restart: on-failure
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - config-server
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_playlist_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=8520
+
+  # 9. THE FAVORITE SERVICE
+  favorite-service:
+    build: ./revplay-favorite-service
+    container_name: favorite-service
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - config-server
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_favorite_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=8520
+
+  # 10. THE PLAYBACK SERVICE
+  playback-service:
+    build: ./revplay-playback-service
+    container_name: playback-service
+    restart: on-failure
+    ports:
+      - "8086:8086"
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - config-server
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_playback_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=8520
+
+  # 11. THE ANALYTICS SERVICE
+  analytics-service:
+    build: ./revplay-analytics-service
+    container_name: analytics-service
+    restart: on-failure
+    ports:
+      - "8087:8087"
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - config-server
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888 # FIXED CONFIG URL
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/revplay_analytics_db?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=8520
